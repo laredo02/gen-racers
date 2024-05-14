@@ -14,7 +14,7 @@ def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de
         return -1
     mindist = 1e10
     for pixel in checkpoint:
-        coord_to_checkpoint = (checkpoint[0] - coord[0], checkpoint[1] - coord[1])
+        coord_to_checkpoint = (pixel[0] - coord[0], pixel[1] - coord[1])
         dist = math.sqrt(coord_to_checkpoint[0]**2 + coord_to_checkpoint[1]**2)
         if dist < mindist:
             mindist = dist
@@ -88,7 +88,7 @@ def print_track(mapa, checkpoints): # Imprimir mapa y checkpionts superpuestos
 
 
 def checkpoint_centre(checkpoint):
-    return checkpoint[len(checkpoint)/2]
+    return checkpoint[len(checkpoint)//2]
 
 
 # def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
