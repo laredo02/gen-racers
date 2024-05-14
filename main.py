@@ -5,7 +5,7 @@ from typing import List, Dict
 import random
 
 from utils import image_to_matrix, extract_checkpoints
-from utils import print_map, print_checkpoints, print_track, print_coord
+from utils import print_map, print_checkpoints, print_track, print_coord_on_track
 from utils import on_map, on_checkpoint
 
 class GenRacers:
@@ -22,7 +22,7 @@ class GenRacers:
         print(on_map(mapa, checkpoints[0][0]))
         print(on_checkpoint(checkpoints[0], checkpoints[0][0] + (0, 1)))
 
-        print_coord(mapa, (1, 0))
+        print_coord_on_track(mapa, checkpoints, (1, 0))
 
 
         self.n_ants = n_ants

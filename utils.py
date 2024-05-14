@@ -10,10 +10,12 @@ def on_checkpoint(checkpoint, coord):
     return coord in checkpoint
 
 def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de coordenadas de un checkpoint [(x,y), (x, y), (), ...]
+    if checkpoint == []:
+        return -1
     mindist = 1e10
     for pixel in checkpoint:
         coord_to_checkpoint = (checkpoint[0] - coord[0], checkpoint[1] - coord[1])
-        dist = math.sqrt(coord_to_checkpoint[0]**2, coord_to_checkpoint[1]**2)
+        dist = math.sqrt(coord_to_checkpoint[0]**2 + coord_to_checkpoint[1]**2)
         if dist < mindist:
             mindist = dist
     return mindist
@@ -53,13 +55,16 @@ def print_checkpoints(checkpoints): # Imprimir coordenadas de los pixeles que fo
     for i, checkpoint in enumerate(checkpoints):
         print(f"Checkpoint {i}: {checkpoint}")
 
-def print_coord(mapa, coord): # imprime una coordenada (x, y) dentro del mapa
+def print_coord_on_track(mapa, checkpoints, coord): # imprime una coordenada (x, y) dentro del mapa
+    all_coordinates = [coord for checkpoint in checkpoints for coord in checkpoint]
     i = 0
     for row in mapa:
         j = 0
         for pixel in row:
             if (j, i) == coord:
                 print('*', end=' ')
+            elif (j, i) in all_coordinates:
+                print(' ', end=' ')
             else:
                 print(pixel, end=' ')
             j+=1
