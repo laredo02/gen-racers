@@ -87,5 +87,8 @@ def print_track(mapa, checkpoints): # Imprimir mapa y checkpionts superpuestos
         print()  # Nueva línea al final de cada fila
 
 
+def checkpoint_centre(checkpoint):
+    return checkpoint[len(checkpoint)/2]
 
 
+# def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
