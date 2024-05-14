@@ -4,26 +4,21 @@ from copy import deepcopy
 from typing import List, Dict
 import random
 
-from utils import image_to_matrix, extract_checkpoints
+from utils import image_to_matrix, extract_blue_checkpoints, extract_red_checkpoints
 from utils import print_map, print_checkpoints, print_track, print_coord_on_track
 from utils import on_map, on_checkpoint
 
 class GenRacers:
 
-    def __init__(self, map_path: str, checkpoints_path: str, n_ants: int, alpha: float = 1, beta: float = 5, rho: float = 0.8):
+    def __init__(self, map_path: str, blue_checkpoints_path: str, red_checkpoints_path: str, n_ants: int, alpha: float = 1, beta: float = 5, rho: float = 0.8):
         mapa = image_to_matrix(map_path)
-        print_map(mapa)
-        checkpoints = extract_checkpoints(checkpoints_path)
-        print_checkpoints(checkpoints)
-        print_track(mapa, checkpoints)
+        blue_checkpoints = extract_blue_checkpoints(blue_checkpoints_path)
+        red_checkpoints = extract_red_checkpoints(red_checkpoints_path)
 
+        print_checkpoints(blue_checkpoints)
+        print_checkpoints(red_checkpoints)
 
-        print(checkpoints[0][0])
-        print(on_map(mapa, checkpoints[0][0]))
-        print(on_checkpoint(checkpoints[0], checkpoints[0][0] + (0, 1)))
-
-        print_coord_on_track(mapa, checkpoints, (1, 0))
-
+        print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, (0, 0))
 
         self.n_ants = n_ants
         self.alpha = alpha
@@ -36,7 +31,6 @@ class GenRacers:
         
 
     #def optimize():
-        
 
     #def _initialize():
 
@@ -60,7 +54,8 @@ class GenRacers:
     #def _update_pheromone():
 
 
-genracers = GenRacers("rsc/map.png", "rsc/checkpoints.png", 3)
+genracers = GenRacers("rsc/tomeu_map/map.png", "rsc/tomeu_map/blue_checkpoints.png", "rsc/tomeu_map/red_checkpoints.png", 3)
+
 
 
 
