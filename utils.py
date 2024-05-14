@@ -1,5 +1,23 @@
+
 from PIL import Image
 import numpy as np
+import math
+
+def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar
+    return mapa[coord[1]][coord[0]] == 0
+
+def on_checkpoint(checkpoint, coord):
+    return coord in checkpoint
+
+def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de coordenadas de un checkpoint [(x,y), (x, y), (), ...]
+    mindist = 1e10
+    for pixel in checkpoint:
+        coord_to_checkpoint = (checkpoint[0] - coord[0], checkpoint[1] - coord[1])
+        dist = math.sqrt(coord_to_checkpoint[0]**2, coord_to_checkpoint[1]**2)
+        if dist < mindist:
+            mindist = dist
+    return mindist
+
 
 def image_to_matrix(image_path, threshold=128): # Convertir el mapa en una matriz
     image = Image.open(image_path).convert('L') # Abrir la imagen y convertirla a escala de grises
@@ -35,6 +53,19 @@ def print_checkpoints(checkpoints): # Imprimir coordenadas de los pixeles que fo
     for i, checkpoint in enumerate(checkpoints):
         print(f"Checkpoint {i}: {checkpoint}")
 
+def print_coord(mapa, coord): # imprime una coordenada (x, y) dentro del mapa
+    i = 0
+    for row in mapa:
+        j = 0
+        for pixel in row:
+            if (j, i) == coord:
+                print('*', end=' ')
+            else:
+                print(pixel, end=' ')
+            j+=1
+        i+=1
+        print()  # Nueva línea al final de cada fila
+
 
 def print_track(mapa, checkpoints): # Imprimir mapa y checkpionts superpuestos
     all_coordinates = [coord for checkpoint in checkpoints for coord in checkpoint]
@@ -50,8 +81,6 @@ def print_track(mapa, checkpoints): # Imprimir mapa y checkpionts superpuestos
         i+=1
         print()  # Nueva línea al final de cada fila
 
-
-# def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
 
 
 
