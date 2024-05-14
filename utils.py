@@ -3,13 +3,13 @@ from PIL import Image
 import numpy as np
 import math
 
-def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar
+def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar. devuelve true si la cordenada esta en el track
     return mapa[coord[1]][coord[0]] == 0
 
-def on_checkpoint(checkpoint, coord):
+def on_checkpoint(checkpoint, coord): # Comprobar si una coordenada esta dentro de un checkpoint
     return coord in checkpoint
 
-def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de coordenadas de un checkpoint [(x,y), (x, y), (), ...]
+def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de coordenadas de un checkpoint [(x,y), (x, y), (), ...], devuelve la distancia al pixel mas cercano
     if checkpoint == []:
         return -1
     mindist = 1e10

@@ -17,14 +17,6 @@ class GenRacers:
         print_checkpoints(checkpoints)
         print_track(mapa, checkpoints)
 
-
-        print(checkpoints[0][0])
-        print(on_map(mapa, checkpoints[0][0]))
-        print(on_checkpoint(checkpoints[0], checkpoints[0][0] + (0, 1)))
-
-        print_coord_on_track(mapa, checkpoints, (1, 0))
-
-
         self.n_ants = n_ants
         self.alpha = alpha
         self.beta = beta
@@ -36,7 +28,6 @@ class GenRacers:
         
 
     #def optimize():
-        
 
     #def _initialize():
 
