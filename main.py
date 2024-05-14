@@ -4,7 +4,7 @@ from copy import deepcopy
 from typing import List, Dict
 import random
 
-from utils import image_to_matrix, extract_blue_checkpoints, extract_red_checkpoints
+from utils import image_to_matrix, extract_blue_checkpoints, extract_red_checkpoints, checkpoint_middle_pixel
 from utils import print_map, print_checkpoints, print_track, print_coord_on_track
 from utils import on_map, on_checkpoint
 
@@ -18,7 +18,8 @@ class GenRacers:
         print_checkpoints(blue_checkpoints)
         print_checkpoints(red_checkpoints)
 
-        print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, (0, 0))
+        coord_inicial = checkpoint_middle_pixel(red_checkpoints[len(red_checkpoints)-1])
+        print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord_inicial)
 
         self.n_ants = n_ants
         self.alpha = alpha

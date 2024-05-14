@@ -115,7 +115,8 @@ def print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord): # impr
         i+=1
         print()
 
-
-
-
 # def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
+
+
+
+
