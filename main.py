@@ -12,10 +12,7 @@ class GenRacers:
 
     def __init__(self, map_path: str, checkpoints_path: str, n_ants: int, alpha: float = 1, beta: float = 5, rho: float = 0.8):
         mapa = image_to_matrix(map_path)
-        print_map(mapa)
         checkpoints = extract_checkpoints(checkpoints_path)
-        print_checkpoints(checkpoints)
-        print_track(mapa, checkpoints)
 
         self.n_ants = n_ants
         self.alpha = alpha
