@@ -44,10 +44,10 @@ class ACO:
         self.red_checkpoints = extract_red_checkpoints(red_checkpoints_path)
         self.coord_inicial = checkpoint_middle_pixel(self.red_checkpoints[len(self.red_checkpoints)-1])
 
-        self.n_ants = n_ants
-        self.alpha = alpha
-        self.beta = beta
-        self.rho = rho
+        self.n_ants = n_ants    # N de hormigas por iteracion
+        self.alpha = alpha      # Influencia de la feromona
+        self.beta = beta        # Influencia de la heuristica
+        self.rho = rho          # Evaporacion
 
         self.pheromone_history = []
         self.trails_history = []
@@ -89,11 +89,9 @@ class ACO:
         return self.best_solution
 
     def _initialize():
-        self.pheromone = np.ones()
-
+        self.pheromone = np.ones() # falta algo
         self.best_solution = None
         self.best_fitness = float('-inf')
-
         self.pheromone_history = []
         self.trails_history = []
         self.best_fitness_history = []
@@ -103,7 +101,7 @@ class ACO:
 
         while moves < MAXMOVES:
             candidates = self._get_candidates() # Candidatos estaticos, previa eleccion no excluyente
-            pheromones = self.pheromone[candidates]**self.alpha
+            pheromones = self.pheromone**self.alpha
             heuristic = self._heuristic(candidates)**self.beta
         
             total = np.sum(pheromones * heuristic)
