@@ -136,4 +136,6 @@ def checkpoint_centre(checkpoint):
     return checkpoint[len(checkpoint)//2]
 
 
+def display_genome(display, screen, genome, posicion):
+    return 0
 # def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
