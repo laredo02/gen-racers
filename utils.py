@@ -1,4 +1,6 @@
+from time import sleep
 
+import pygame
 from PIL import Image
 import numpy as np
 import math
@@ -97,6 +99,7 @@ def print_track(mapa, blue_checkpoints, red_checkpoints): # Imprimir mapa y chec
         i+=1
         print()
 
+
 def print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord): # imprime una coordenada (x, y) dentro del mapa y con los checkpoints
     all_blue_coordinates = [coord for checkpoint in blue_checkpoints for coord in checkpoint]
     all_red_coordinates = [coord for checkpoint in red_checkpoints for coord in checkpoint]
@@ -136,5 +139,45 @@ def checkpoint_centre(checkpoint):
     return checkpoint[len(checkpoint)//2]
 
 
-def display_genome(display, screen, genome, posicion):
-    return 0
+# Muestra los caminos de una poblacion
+def display_paths(screen, track, genome, colours, posicion_origen):
+    screen.blit(track, (0, 0))
+    for i in range(len(colours)):
+        display_path(screen, genome[i], colours[i], posicion_origen)
+
+
+# Muestra el camino seguido po un individuo en el color provisto
+def display_path(screen, genome, posicion_origen, colour):
+    position = posicion_origen
+    display_position(screen, position, colour)
+    for gene in genome:
+        position = move(position, gene)
+        display_position(screen, position, colour)
+
+
+# Muestra el movimiento de un individuo siempre en verde, sin dejar rastro
+def display_genome(display, screen, track, genome, posicion_origen):
+    position = posicion_origen
+    screen.blit(track, (0, 0))
+    display_position(screen, track, position)
+    for gene in genome:
+        position = move(position, gene)
+        screen.blit(track, (0, 0))
+        display_position(screen, position, (0,255,0))
+
+
+# Computa la posicion despues de consumir un gen
+def move(position, gene):
+    movement = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]]
+    position[0] = + movement[gene][0]
+    position[1] = + movement[gene][1]
+    return position
+
+
+# Cambia el pixel de la pantalla a un color parado por parametro. Esta escalado por 8 para que pueda verse correctamente
+def display_position(screen, position, colour):
+    for i in range(8):
+        for j in range(8):
+            screen.set_at((8 * position[0] + i, 8 * position[1] + j), colour)
+    pygame.display.flip()
+
