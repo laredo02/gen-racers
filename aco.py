@@ -1,3 +1,4 @@
+import pygame
 
 from utils import *
 import numpy as np
@@ -13,6 +14,10 @@ class Car:
         self.prev_red = False
         self.on_blue = False
         self.on_red = False
+        ############################### PARAMETROS PARA DISPLAY ##############################
+        pygame.init()
+        self.screen = pygame.display.set_mode((800, 800))
+        self.track_image = pygame.transform.scale(pygame.image.load("rsc/tomeu_map/map.png"), (800, 800))
 
     def move_car(self, move_number): # Devuelve la coordenada donde se movera el coche en caso de aplicar el movimiento del número parametro pasado, pero no las almacena.
         last_coordinate = self.coordinates[-1]

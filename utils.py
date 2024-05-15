@@ -1,7 +1,10 @@
+from time import sleep
 
+import pygame
 from PIL import Image
 import numpy as np
 import math
+
 
 def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar. devuelve true si la cordenada esta en el track
     return mapa[coord[1]][coord[0]] == 0
@@ -14,7 +17,7 @@ def min_distance_to_checkpoint(coord, checkpoint): # coordenada (x, y), lista de
         return -1
     mindist = 1e10
     for pixel in checkpoint:
-        coord_to_checkpoint = (pixel[0] - pixel[0], pixel[1] - pixel[1])
+        coord_to_checkpoint = (pixel[0] - coord[0], pixel[1] - coord[1])
         dist = math.sqrt(coord_to_checkpoint[0]**2 + coord_to_checkpoint[1]**2)
         if dist < mindist:
             mindist = dist
@@ -48,7 +51,7 @@ def extract_blue_checkpoints(image_path, max_checkpoints=256): # Extraer los che
                 r, g, b = pixel
                 a = 255  # Asumir que el alfa es 255 si no está presente
             if r == 0 and b == 255 and a == 255:
-                checkpoints[g].append((x, y))
+                checkpoints[g].append([x, y])
     checkpoints = [chk for chk in checkpoints if chk]
     return checkpoints
 
@@ -65,7 +68,7 @@ def extract_red_checkpoints(image_path, max_checkpoints=256): # Extraer los chec
                 r, g, b = pixel
                 a = 255  # Asumir que el alfa es 255 si no está presente
             if r == 255 and b == 0 and a == 255:
-                checkpoints[g].append((x, y))
+                checkpoints[g].append([x, y])
     checkpoints = [chk for chk in checkpoints if chk]
     return checkpoints
 
@@ -96,6 +99,7 @@ def print_track(mapa, blue_checkpoints, red_checkpoints): # Imprimir mapa y chec
         i+=1
         print()
 
+
 def print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord): # imprime una coordenada (x, y) dentro del mapa y con los checkpoints
     all_blue_coordinates = [coord for checkpoint in blue_checkpoints for coord in checkpoint]
     all_red_coordinates = [coord for checkpoint in red_checkpoints for coord in checkpoint]
@@ -115,8 +119,65 @@ def print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord): # impr
         i+=1
         print()
 
-# def display_cars(): # interfaz grafica con los caminos de los coches recibe la imagen del mapa, de los checkpoints y una lista de caminos de coches
+
+def print_track(mapa, checkpoints): # Imprimir mapa y checkpionts superpuestos
+    all_coordinates = [coord for checkpoint in checkpoints for coord in checkpoint]
+    i = 0
+    for row in mapa:
+        j = 0
+        for pixel in row:
+            if (j, i) in all_coordinates:
+                print(' ', end=' ')
+            else:
+                print(pixel, end=' ')
+            j+=1
+        i+=1
+        print()  # Nueva línea al final de cada fila
 
 
+def checkpoint_centre(checkpoint):
+    return checkpoint[len(checkpoint)//2]
 
+
+# Muestra los caminos de una poblacion
+def display_paths(screen, track, genome, colours, posicion_origen):
+    screen.blit(track, (0, 0))
+    for i in range(len(colours)):
+        display_path(screen, genome[i], colours[i], posicion_origen)
+
+
+# Muestra el camino seguido po un individuo en el color provisto
+def display_path(screen, genome, posicion_origen, colour):
+    position = posicion_origen
+    display_position(screen, position, colour)
+    for gene in genome:
+        position = move(position, gene)
+        display_position(screen, position, colour)
+
+
+# Muestra el movimiento de un individuo siempre en verde, sin dejar rastro
+def display_genome(display, screen, track, genome, posicion_origen):
+    position = posicion_origen
+    screen.blit(track, (0, 0))
+    display_position(screen, track, position)
+    for gene in genome:
+        position = move(position, gene)
+        screen.blit(track, (0, 0))
+        display_position(screen, position, (0,255,0))
+
+
+# Computa la posicion despues de consumir un gen
+def move(position, gene):
+    movement = [[-1, -1], [0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0]]
+    position[0] = + movement[gene][0]
+    position[1] = + movement[gene][1]
+    return position
+
+
+# Cambia el pixel de la pantalla a un color parado por parametro. Esta escalado por 8 para que pueda verse correctamente
+def display_position(screen, position, colour):
+    for i in range(8):
+        for j in range(8):
+            screen.set_at((8 * position[0] + i, 8 * position[1] + j), colour)
+    pygame.display.flip()
 
