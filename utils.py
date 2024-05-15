@@ -5,7 +5,6 @@ from PIL import Image
 import numpy as np
 import math
 
-
 def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar. devuelve true si la cordenada esta en el track
     return mapa[coord[1]][coord[0]] == 0
 
@@ -82,36 +81,29 @@ def print_checkpoints(checkpoints): # Imprimir coordenadas de los pixeles que fo
     for i, checkpoint in enumerate(checkpoints):
         print(f"Checkpoint {i}: {checkpoint}")
 
-def print_track(mapa, blue_checkpoints, red_checkpoints): # Imprimir mapa y checkpionts superpuestos
-    all_blue_coordinates = [coord for checkpoint in blue_checkpoints for coord in checkpoint]
-    all_red_coordinates = [coord for checkpoint in red_checkpoints for coord in checkpoint]
-    i = 0
-    for row in mapa:
-        j = 0
-        for pixel in row:
-            if (j, i) in all_blue_coordinates:
-                print(' ', end='B')
-            elif (j, i) in all_red_coordinates:
-                print(' ', end='R')
-            else:
-                print(pixel, end=' ')
-            j+=1
-        i+=1
-        print()
-
-
 def print_coord_on_track(mapa, blue_checkpoints, red_checkpoints, coord): # imprime una coordenada (x, y) dentro del mapa y con los checkpoints
     all_blue_coordinates = [coord for checkpoint in blue_checkpoints for coord in checkpoint]
     all_red_coordinates = [coord for checkpoint in red_checkpoints for coord in checkpoint]
+
+    all_blue_coordinates_tuple = []
+    for i, j in all_blue_coordinates:
+        all_blue_coordinates_tuple.append((i, j))
+        
+    all_red_coordinates_tuple = []
+    for i, j in all_red_coordinates:
+        all_red_coordinates_tuple.append((i, j))
+
+    coord = (coord[0], coord[1])
+
     i = 0
     for row in mapa:
         j = 0
         for pixel in row:
             if (j, i) == coord:
                 print('*', end=' ')
-            elif (j, i) in all_blue_coordinates:
+            elif (j, i) in all_blue_coordinates_tuple:
                 print('B', end=' ')
-            elif (j, i) in all_red_coordinates:
+            elif (j, i) in all_red_coordinates_tuple:
                 print('R', end=' ')
             else:
                 print(pixel, end=' ')
