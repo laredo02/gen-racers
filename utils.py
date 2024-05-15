@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import math
 
+
 def on_map(mapa, coord): # matriz de mapa y coordenada (x, y) que se quiere comprobar. devuelve true si la cordenada esta en el track
     return mapa[coord[1]][coord[0]] == 0
 
@@ -48,7 +49,7 @@ def extract_blue_checkpoints(image_path, max_checkpoints=256): # Extraer los che
                 r, g, b = pixel
                 a = 255  # Asumir que el alfa es 255 si no está presente
             if r == 0 and b == 255 and a == 255:
-                checkpoints[g].append((x, y))
+                checkpoints[g].append([x, y])
     checkpoints = [chk for chk in checkpoints if chk]
     return checkpoints
 
