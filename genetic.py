@@ -84,7 +84,10 @@ class Genetic(benchmarks.Benchmark):
                 new_postion = utils.checkpoint_centre(previous_checkpoint)
                 position = [new_postion[0], new_postion[1]]
         distance_previous_checkpoint = utils.min_distance_to_checkpoint(position, previous_checkpoint)
-        return checkpoint * 30 + distance_previous_checkpoint
+        if checkpoint > 0:
+            return checkpoint * 10 + 10 * distance_previous_checkpoint
+        else:
+            return -10*checkpoint
 
     def generator(self, random, args):
         """Return a candidate solution for an evolutionary algorithm."""
@@ -167,11 +170,11 @@ final_pop = ga.evolve(generator=problem.generator,
                       bounder=problem.bounder,
                       maximize=problem.maximize,
                       pop_size=100,
-                      max_generations=20,
-                      num_elites=1,
+                      max_generations=10000,
+                      num_elites=10,
                       num_selected=100,
                       crossover_rate=1,
-                      num_crossover_points=1,
+                      num_crossover_points=40,
                       mutation_rate=0.05)
 
 best = max(ga.population)

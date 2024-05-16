@@ -143,27 +143,21 @@ def checkpoint_centre(checkpoint):
 def display_paths(screen, track, genome, colours, posicion_origen):
     screen.blit(track, (0, 0))
     for i in range(len(colours)):
-        display_path(screen, genome[i], colours[i], posicion_origen)
+        display_path(screen, genome[i], colours[i])
 
 
 # Muestra el camino seguido po un individuo en el color provisto
-def display_path(screen, genome, posicion_origen, colour):
-    position = posicion_origen
-    display_position(screen, position, colour)
+def display_path(screen, genome, colour):
+    display_position(screen, colour)
     for gene in genome:
-        position = move(position, gene)
-        display_position(screen, position, colour)
+        display_position(screen, gene, colour)
 
 
 # Muestra el movimiento de un individuo siempre en verde, sin dejar rastro
-def display_genome(display, screen, track, genome, posicion_origen):
-    position = posicion_origen
-    screen.blit(track, (0, 0))
-    display_position(screen, track, position)
+def display_genome(display, screen, track, genome, ):
     for gene in genome:
-        position = move(position, gene)
         screen.blit(track, (0, 0))
-        display_position(screen, position, (0,255,0))
+        display_position(screen, gene, (0,255,0))
 
 
 # Computa la posicion despues de consumir un gen
