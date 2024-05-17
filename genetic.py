@@ -2,6 +2,10 @@ from random import Random
 from time import time, sleep
 import pygame
 from inspyred import benchmarks, ec
+import matplotlib
+from matplotlib import pyplot as plt
+
+matplotlib.use('TkAgg')
 
 import utils
 
@@ -37,6 +41,9 @@ class Genetic(benchmarks.Benchmark):
         pygame.init()
         self.screen = pygame.display.set_mode((800,800))
         self.track_image = pygame.transform.scale(pygame.image.load(map),(800,800))
+        self.min = []
+        self.max = []
+        self.avg = []
 
     def simulate(self, genome, show):
         pygame.display.init()
@@ -76,22 +83,33 @@ class Genetic(benchmarks.Benchmark):
                 new_postion = utils.checkpoint_centre(previous_checkpoint)
                 position = [new_postion[0], new_postion[1]]
         distance_previous_checkpoint = utils.min_distance_to_checkpoint(position, previous_checkpoint)
-        return checkpoint * 30 + distance_previous_checkpoint - 5 * crashes
+        if checkpoint > 0:
+            return checkpoint * 10 + 10 * distance_previous_checkpoint
+        else:
+            return -10*checkpoint
 
     def generator(self, random, args):
         """Return a candidate solution for an evolutionary algorithm."""
         return [random.choice([0, 1, 2, 3, 4, 5, 6, 7]) for _ in range(genome_size)]
 
     def evaluator(self, candidates, args):
-        individuo = 0
+        max_fitness = 0
+        min_fitness = 1e10
+        sum_fitness = 0
         fitness = []
         print("generacion ", self.generacion)
         self.generacion += 1
         for candidate in candidates:
-            # individuo+=1
-            # print("        individuo ", individuo)
             cand_fitness = self.simulate(candidate, False)
+            if cand_fitness > max_fitness:
+                max_fitness = cand_fitness
+            if cand_fitness < min_fitness:
+                min_fitness = cand_fitness
+            sum_fitness += cand_fitness
             fitness.append(cand_fitness)
+        self.min.append(min_fitness)
+        self.max.append(max_fitness)
+        self.avg.append(sum_fitness/100)
         return fitness
 
     def show_map(self, position, booleans):
@@ -122,6 +140,16 @@ class Genetic(benchmarks.Benchmark):
         for i in range(len(string)):
             self.screen.blit(arial.render(string[i], False, colours[i]), coordenadas[i])
 
+    def show_stat(self):
+        plt.scatter(range(len(self.min)), self.min, color='red', label='Min Fitness')
+        plt.scatter(range(len(self.max)), self.max, color='green', label='Max Fitness')
+        plt.scatter(range(len(self.avg)), self.avg, color='blue', label='Avg Fitness')
+        plt.xlabel('Generacion')
+        plt.ylabel('Fitness')
+        plt.title('Fitness minimo, maximo, y medio en cada generación.')
+        plt.legend()
+        plt.show()
+
 
 
 problem = Genetic()
@@ -141,13 +169,14 @@ final_pop = ga.evolve(generator=problem.generator,
                       bounder=problem.bounder,
                       maximize=problem.maximize,
                       pop_size=100,
-                      max_generations=1000,
-                      num_elites=1,
+                      max_generations=10000,
+                      num_elites=10,
                       num_selected=100,
                       crossover_rate=1,
-                      num_crossover_points=1,
+                      num_crossover_points=40,
                       mutation_rate=0.05)
 
 best = max(ga.population)
 print('Best Solution: {0}: {1}'.format(str(best.candidate), best.fitness))
+problem.show_stat()
 problem.simulate(best.candidate, True)
